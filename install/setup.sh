@@ -4,7 +4,7 @@ if [[ ! $(id -u) -eq 0 ]] ; then
     #exit 0
 fi
 if [[ -z $1 ]] ; then
-    echo "Useage: setup.sh install|initcfg"
+    echo "Useage: setup.sh install --with=php,nginx,mysql"
     exit 0
 fi
 
@@ -18,20 +18,27 @@ mysql_dist_url=http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-${mysql_version}.t
 
 base_dir="/opt/net.techest/tpanel/"
 src_dir=${base_dir}"src/"
-shell_dir=${base_dir}"install/"
+shell_dir=$(pwd)
 
 ##========================= nginx =========================##
 function ins_nginx() {
     cd $src_dir
+    if [[ -f ${base_dir}/server/nginx-${nginx_version}/bin/nginx ]] ; then
+        echo "Nginx Existed"
+        return
+    fi
     rm nginx-${nginx_version} -rf
     tar xvf nginx-${nginx_version}.tar.gz
     cd nginx-${nginx_version}
     ./configure --prefix=${base_dir}/server/nginx-${nginx_version}
     make && make install
-    cd $shell_dir
 }
 
 function init_nginx() {
+    if [[ -f ${base_dir}server/nginx-${nginx_version}/conf/nginx.conf ]] ; then
+        echo "Nginx Config Existed"
+        return
+    fi
     rm ${base_dir}server/nginx
     cp ${shell_dir}/nginx.conf.default ${base_dir}server/nginx-${nginx_version}/conf/nginx.conf
     ln -s ${base_dir}server/nginx-${nginx_version} ${base_dir}server/nginx
@@ -40,6 +47,10 @@ function init_nginx() {
 ##========================= mysql =========================##
 function ins_mysql() {
     cd $src_dir
+    if [[ -f ${base_dir}server/mysql-${mysql_version}/bin/mysqld ]] ; then
+        echo "Mysqld Existed"
+        return
+    fi
     rm mysql-${mysql_version} -rf
     tar xvf mysql-${mysql_version}.tar.gz
     cd mysql-${mysql_version}
@@ -67,6 +78,10 @@ function ins_python() {
 ##========================= php =========================##
 function ins_php() {
     cd ${src_dir}
+    if [[ -f ${base_dir}server/php-${php_version}/bin/php ]] ; then
+        echo "PHP Binary Existed"
+        return
+    fi
     tar xvf php-${php_version}.tar.gz
     cd php-${php_version}
     ./configure --prefix=${base_dir}server/php-${php_version} \
@@ -81,6 +96,11 @@ function ins_php() {
 }
 
 function init_php() {
+    cd ${shell_dir}
+    if [[ -f ${base_dir}server/php-${php_version}/lib/php.ini ]] ; then
+        echo "PHP Config Existed"
+        return
+    fi
     rm ${base_dir}server/fpm-php
     cp ${shell_dir}php-5.4-fpm.conf.default ${base_dir}server/php-${php_version}/etc/php-fpm.conf
     cp ${shell_dir}php-5.4.ini.default ${base_dir}server/php-${php_version}/lib/php.ini
@@ -90,6 +110,10 @@ function init_php() {
 
 ##======================== env =============================##
 function init_env() {
+    cd ${shell_dir}
+    if [[ -f .env_ready ]] ; then
+        return
+    fi
     useradd amm
     apt-get install cmake libtool g++ -y
     apt-get install libcurl4-openssl-dev libmcrypt-dev libpng++-dev libjpeg-dev libfreetype6-dev -y
@@ -98,6 +122,7 @@ function init_env() {
     mkdir ${base_dir}/etc
     mkdir ${base_dir}/logs
     mkdir -p ${src_dir}
+    touch .env_ready
 }
 
 function check_src() {
@@ -136,11 +161,6 @@ if [[ $1 = 'install' ]] ; then
 fi
 if [[ $1 = 'clear' ]] ; then
     find ${src_dir}* -maxdepth 0 -type d | xargs rm -rf
-    echo "Done"
-    exit
-fi
-if [[ $1 = 'initcfg' ]] ; then
-    initcfg
     echo "Done"
     exit
 fi
