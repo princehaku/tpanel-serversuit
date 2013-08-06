@@ -21,6 +21,12 @@ src_dir=${base_dir}"src/"
 shell_dir=$(pwd)
 
 ##========================= nginx =========================##
+function check_nginx() {
+    cd ${src_dir}
+    if [[ ! -f nginx-${nginx_version}.tar.gz ]] ; then
+        wget ${nginx_dist_url} -Onginx-${nginx_version}.tar.gz
+    fi
+}
 function ins_nginx() {
     cd $src_dir
     if [[ -f ${base_dir}/server/nginx-${nginx_version}/sbin/nginx ]] ; then
@@ -35,16 +41,19 @@ function ins_nginx() {
 }
 
 function init_nginx() {
-    if [[ -f ${base_dir}/server/nginx-${nginx_version}/conf/nginx.conf ]] ; then
-        echo "Nginx Config Existed"
-        return
-    fi
     rm ${base_dir}/server/nginx
     cp ${shell_dir}/nginx.conf.default ${base_dir}/server/nginx-${nginx_version}/conf/nginx.conf
     ln -s ${base_dir}/server/nginx-${nginx_version} ${base_dir}/server/nginx
     mkdir ${base_dir}/etc/nginx.d
 }
 ##========================= mysql =========================##
+function check_mysql() {
+    cd ${src_dir}
+    apt-get install libncurses5-dev cmake -y
+    if [[ ! -f mysql-${mysql_version}.tar.gz ]] ; then
+        wget ${mysql_dist_url} -Omysql-${mysql_version}.tar.gz
+    fi
+}
 function ins_mysql() {
     cd $src_dir
     if [[ -f ${base_dir}/server/mysql-${mysql_version}/bin/mysqld ]] ; then
@@ -68,6 +77,9 @@ function init_mysql() {
     echo
 }
 ##========================= python =========================##
+function check_python() {
+
+}
 function ins_python() {
     cd $src_dir
     tar xvf Python-2.7.5.tgz
@@ -80,6 +92,13 @@ function init_python() {
     ${base_dir}/shared/python-2.7.5/bin/python ez_setup.py
 }
 ##========================= php =========================##
+function check_php() {
+    cd ${src_dir}
+    apt-get install libcurl4-openssl-dev libmcrypt-dev libpng++-dev libjpeg-dev libfreetype6-dev -y
+    if [[ ! -f php-${php_version}.tar.gz ]] ; then
+        wget ${php_dist_url} -Ophp-${php_version}.tar.gz
+    fi
+}
 function ins_php() {
     cd ${src_dir}
     if [[ -f ${base_dir}/server/php-${php_version}/bin/php ]] ; then
@@ -101,10 +120,6 @@ function ins_php() {
 
 function init_php() {
     cd ${shell_dir}
-    if [[ -f ${base_dir}/server/php-${php_version}/lib/php.ini ]] ; then
-        echo "PHP Config Existed"
-        return
-    fi
     rm ${base_dir}/server/fpm-php
     cp ${shell_dir}/php-5.4-fpm.conf.default ${base_dir}/server/php-${php_version}/etc/php-fpm.conf
     cp ${shell_dir}/php-5.4.ini.default ${base_dir}/server/php-${php_version}/lib/php.ini
@@ -116,9 +131,7 @@ function init_php() {
 function init_env() {
     cd ${shell_dir}
     useradd amm
-    apt-get install cmake libtool g++ -y
-    apt-get install libcurl4-openssl-dev libmcrypt-dev libpng++-dev libjpeg-dev libfreetype6-dev -y
-    apt-get install libncurses5-dev cmake -y
+    apt-get install libtool g++ -y
 }
 
 function init_dirs() {
@@ -129,19 +142,6 @@ function init_dirs() {
     mkdir -p ${src_dir}
 }
 
-function check_src() {
-    cd ${src_dir}
-    if [[ ! -f nginx-${nginx_version}.tar.gz ]] ; then
-        wget ${nginx_dist_url} -Onginx-${nginx_version}.tar.gz
-    fi
-    if [[ ! -f php-${php_version}.tar.gz ]] ; then
-        wget ${php_dist_url} -Ophp-${php_version}.tar.gz
-    fi
-    if [[ ! -f mysql-${mysql_version}.tar.gz ]] ; then
-        wget ${mysql_dist_url} -Omysql-${mysql_version}.tar.gz
-    fi
-}
-
 function install() {
     # env init
     if [[ ! -f .env_ready ]] ; then
@@ -150,19 +150,22 @@ function install() {
     init_dirs
     touch .env_ready
 
-    # 检测源包是否存在
-    check_src
+    # 根据指令安装
 
     if [[ -z $1 ]] ; then
+        check_nginx
         ins_nginx
         init_nginx
 
+        check_mysql
         ins_mysql
         init_mysql
 
+        check_php
         ins_php
         init_php
     else
+        check_$1
         ins_$1
         init_$1
     fi
