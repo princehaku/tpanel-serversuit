@@ -119,6 +119,9 @@ function init_env() {
     apt-get install cmake libtool g++ -y
     apt-get install libcurl4-openssl-dev libmcrypt-dev libpng++-dev libjpeg-dev libfreetype6-dev -y
     apt-get install libncurses5-dev cmake -y
+}
+
+function init_dirs() {
     mkdir -p ${base_dir}
     mkdir ${base_dir}/etc
     mkdir ${base_dir}/logs
@@ -141,9 +144,10 @@ function check_src() {
 
 function install() {
     # env init
-    if [[ -f .env_ready ]] ; then
+    if [[ ! -f .env_ready ]] ; then
         init_env
     fi
+    init_dirs
     touch .env_ready
 
     # 检测源包是否存在
