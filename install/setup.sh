@@ -4,7 +4,7 @@ if [[ ! $(id -u) -eq 0 ]] ; then
     #exit 0
 fi
 if [[ -z $1 ]] ; then
-    echo "Useage: setup.sh install --with=php,nginx,mysql"
+    echo "Useage: setup.sh install php|nginx|mysql|python"
     exit 0
 fi
 
@@ -35,19 +35,19 @@ function ins_nginx() {
 }
 
 function init_nginx() {
-    if [[ -f ${base_dir}server/nginx-${nginx_version}/conf/nginx.conf ]] ; then
+    if [[ -f ${base_dir}/server/nginx-${nginx_version}/conf/nginx.conf ]] ; then
         echo "Nginx Config Existed"
         return
     fi
-    rm ${base_dir}server/nginx
-    cp ${shell_dir}/nginx.conf.default ${base_dir}server/nginx-${nginx_version}/conf/nginx.conf
-    ln -s ${base_dir}server/nginx-${nginx_version} ${base_dir}server/nginx
-    mkdir ${base_dir}etc/nginx.d
+    rm ${base_dir}/server/nginx
+    cp ${shell_dir}/nginx.conf.default ${base_dir}/server/nginx-${nginx_version}/conf/nginx.conf
+    ln -s ${base_dir}/server/nginx-${nginx_version} ${base_dir}/server/nginx
+    mkdir ${base_dir}/etc/nginx.d
 }
 ##========================= mysql =========================##
 function ins_mysql() {
     cd $src_dir
-    if [[ -f ${base_dir}server/mysql-${mysql_version}/bin/mysqld ]] ; then
+    if [[ -f ${base_dir}/server/mysql-${mysql_version}/bin/mysqld ]] ; then
         echo "Mysqld Existed"
         return
     fi
@@ -55,7 +55,7 @@ function ins_mysql() {
     tar xvf mysql-${mysql_version}.tar.gz
     cd mysql-${mysql_version}
 
-    cmake -DCMAKE_INSTALL_PREFIX=${base_dir}server/mysql-${mysql_version} \
+    cmake -DCMAKE_INSTALL_PREFIX=${base_dir}/server/mysql-${mysql_version} \
       -DDEFAULT_CHARSET=utf8 \
       -DDEFAULT_COLLATION=utf8_unicode_ci \
       -DWITH_EXTRA_CHARSETS=all \
@@ -64,6 +64,9 @@ function ins_mysql() {
 
     make && make install
 }
+function init_mysql() {
+    echo
+}
 ##========================= python =========================##
 function ins_python() {
     cd $src_dir
@@ -71,20 +74,21 @@ function ins_python() {
     cd Python-2.7.5
     ./configure --prefix=${base_dir}shared/python-2.7.5
     make && make install
-    cd $src_dir
+}
+function init_python() {
     #init pip
-    ${base_dir}shared/python-2.7.5/bin/python ez_setup.py
+    ${base_dir}/shared/python-2.7.5/bin/python ez_setup.py
 }
 ##========================= php =========================##
 function ins_php() {
     cd ${src_dir}
-    if [[ -f ${base_dir}server/php-${php_version}/bin/php ]] ; then
+    if [[ -f ${base_dir}/server/php-${php_version}/bin/php ]] ; then
         echo "PHP Binary Existed"
         return
     fi
     tar xvf php-${php_version}.tar.gz
     cd php-${php_version}
-    ./configure --prefix=${base_dir}server/php-${php_version} \
+    ./configure --prefix=${base_dir}/server/php-${php_version} \
       --with-mysql \
       --with-pdo-mysql \
       --with-curl \
@@ -97,23 +101,20 @@ function ins_php() {
 
 function init_php() {
     cd ${shell_dir}
-    if [[ -f ${base_dir}server/php-${php_version}/lib/php.ini ]] ; then
+    if [[ -f ${base_dir}/server/php-${php_version}/lib/php.ini ]] ; then
         echo "PHP Config Existed"
         return
     fi
-    rm ${base_dir}server/fpm-php
-    cp ${shell_dir}php-5.4-fpm.conf.default ${base_dir}server/php-${php_version}/etc/php-fpm.conf
-    cp ${shell_dir}php-5.4.ini.default ${base_dir}server/php-${php_version}/lib/php.ini
-    ln -s ${base_dir}server/php-${php_version} ${base_dir}server/fpm-php
-    mkdir ${base_dir}etc/fpm.d
+    rm ${base_dir}/server/fpm-php
+    cp ${shell_dir}/php-5.4-fpm.conf.default ${base_dir}/server/php-${php_version}/etc/php-fpm.conf
+    cp ${shell_dir}/php-5.4.ini.default ${base_dir}/server/php-${php_version}/lib/php.ini
+    ln -s ${base_dir}/server/php-${php_version} ${base_dir}/server/fpm-php
+    mkdir ${base_dir}/etc/fpm.d
 }
 
 ##======================== env =============================##
 function init_env() {
     cd ${shell_dir}
-    if [[ -f .env_ready ]] ; then
-        return
-    fi
     useradd amm
     apt-get install cmake libtool g++ -y
     apt-get install libcurl4-openssl-dev libmcrypt-dev libpng++-dev libjpeg-dev libfreetype6-dev -y
@@ -121,8 +122,8 @@ function init_env() {
     mkdir -p ${base_dir}
     mkdir ${base_dir}/etc
     mkdir ${base_dir}/logs
+    mkdir ${base_dir}/server
     mkdir -p ${src_dir}
-    touch .env_ready
 }
 
 function check_src() {
@@ -139,30 +140,40 @@ function check_src() {
 }
 
 function install() {
-    init_env
+    # env init
+    if [[ -f .env_ready ]] ; then
+        init_env
+    fi
+    touch .env_ready
+
+    # 检测源包是否存在
     check_src
 
-    ins_nginx
-    ins_mysql
-    ins_php
+    if [[ -z $1 ]] ; then
+        ins_nginx
+        init_nginx
 
-    initcfg
-}
+        ins_mysql
+        init_mysql
 
-function initcfg() {
-    init_php
-    init_nginx
+        ins_php
+        init_php
+    else
+        ins_$1
+        init_$1
+    fi
 }
 
 if [[ $1 = 'install' ]] ; then
-    install
+    install $2
     echo "Done"
     exit
 fi
+
 if [[ $1 = 'clear' ]] ; then
     find ${src_dir}* -maxdepth 0 -type d | xargs rm -rf
+    rm ${base_dir} -rf
     echo "Done"
     exit
 fi
-$1
 exit
