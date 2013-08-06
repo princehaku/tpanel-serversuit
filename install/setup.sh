@@ -128,13 +128,13 @@ function init_env() {
 function check_src() {
     cd ${src_dir}
     if [[ ! -f nginx-${nginx_version}.tar.gz ]] ; then
-        wget ${nginx_dist_url} -O=nginx-${nginx_version}.tar.gz
+        wget ${nginx_dist_url} -Onginx-${nginx_version}.tar.gz
     fi
     if [[ ! -f php-${php_version}.tar.gz ]] ; then
-        wget ${php_dist_url} -O=php-${php_version}.tar.gz
+        wget ${php_dist_url} -Ophp-${php_version}.tar.gz
     fi
     if [[ ! -f mysql-${mysql_version}.tar.gz ]] ; then
-        wget ${mysql_dist_url} -O=mysql-${mysql_version}.tar.gz
+        wget ${mysql_dist_url} -Omysql-${mysql_version}.tar.gz
     fi
 }
 
