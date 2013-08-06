@@ -23,7 +23,7 @@ shell_dir=$(pwd)
 ##========================= nginx =========================##
 function ins_nginx() {
     cd $src_dir
-    if [[ -f ${base_dir}/server/nginx-${nginx_version}/bin/nginx ]] ; then
+    if [[ -f ${base_dir}/server/nginx-${nginx_version}/sbin/nginx ]] ; then
         echo "Nginx Existed"
         return
     fi
@@ -128,13 +128,13 @@ function init_env() {
 function check_src() {
     cd ${src_dir}
     if [[ ! -f nginx-${nginx_version}.tar.gz ]] ; then
-        wget ${nginx_dist_url} nginx-${nginx_version}.tar.gz
+        wget ${nginx_dist_url} -O=nginx-${nginx_version}.tar.gz
     fi
     if [[ ! -f php-${php_version}.tar.gz ]] ; then
-        wget ${php_dist_url} php-${php_version}.tar.gz
+        wget ${php_dist_url} -O=php-${php_version}.tar.gz
     fi
     if [[ ! -f mysql-${mysql_version}.tar.gz ]] ; then
-        wget ${mysql_dist_url} mysql-${mysql_version}.tar.gz
+        wget ${mysql_dist_url} -O=mysql-${mysql_version}.tar.gz
     fi
 }
 
