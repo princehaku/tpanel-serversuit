@@ -1,7 +1,7 @@
 #!/bin/bash
 if [[ ! $(id -u) -eq 0 ]] ; then
     echo "You Must Be Root"
-    #exit 0
+    exit 0
 fi
 if [[ -z $1 ]] ; then
     echo "Useage: setup.sh install php|nginx|mysql|python"
@@ -78,7 +78,7 @@ function init_mysql() {
 }
 ##========================= python =========================##
 function check_python() {
-
+    echo
 }
 function ins_python() {
     cd $src_dir
