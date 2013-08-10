@@ -10,11 +10,11 @@ fi
 
 nginx_version=1.4.2
 php_version=5.4.16
-mysql_version=5.6.12
+mysql_version=5.5.33
 
 nginx_dist_url=http://nginx.org/download/nginx-${nginx_version}.tar.gz
 php_dist_url=http://www.php.net/distributions/php-${php_version}.tar.gz
-mysql_dist_url=http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-${mysql_version}.tar.gz
+mysql_dist_url=http://cdn.mysql.com/Downloads/MySQL-5.5/mysql-${mysql_version}.tar.gz
 
 base_dir="/opt/net.techest/tpanel/"
 src_dir=${base_dir}"src/"
@@ -121,8 +121,8 @@ function ins_php() {
 function init_php() {
     cd ${shell_dir}
     rm ${base_dir}/server/fpm-php
-    cp ${shell_dir}/php-5.4-fpm.conf.default ${base_dir}/server/php-${php_version}/etc/php-fpm.conf
-    cp ${shell_dir}/php-5.4.ini.default ${base_dir}/server/php-${php_version}/lib/php.ini
+    cp ${shell_dir}/php-fpm.conf.default ${base_dir}/server/php-${php_version}/etc/php-fpm.conf
+    cp ${shell_dir}/php.ini.default ${base_dir}/server/php-${php_version}/lib/php.ini
     ln -s ${base_dir}/server/php-${php_version} ${base_dir}/server/fpm-php
     mkdir ${base_dir}/etc/fpm.d
 }
