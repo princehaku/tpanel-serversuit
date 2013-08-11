@@ -37,6 +37,10 @@ function ins_nginx() {
     cd nginx-${nginx_version}
     ./configure --prefix=${base_dir}/server/nginx-${nginx_version}
     make && make install
+    if [[ -f ${base_dir}/server/nginx-${nginx_version}/sbin/nginx ]] ; then
+        echo "Nginx Install Failed"
+        exit(0)
+    fi
 }
 
 function init_nginx() {
@@ -68,6 +72,11 @@ function ins_mysql() {
       -DWITH_UNIT_TESTS=0
 
     make && make install
+    
+    if [[ -f ${base_dir}/server/mysql-${mysql_version}/bin/mysqld ]] ; then
+        echo "Mysql Install Failed"
+        exit(0)
+    fi
 }
 function init_mysql() {
     echo
@@ -98,6 +107,11 @@ function ins_php() {
       --enable-mbstring
 
     make && make install
+    
+    if [[ -f ${base_dir}/server/php-${php_version}/bin/php ]] ; then
+        echo "PHP Install Failed"
+        exit(0)
+    fi
 }
 
 function init_php() {
