@@ -23,9 +23,7 @@ shell_dir=$(pwd)
 ##========================= nginx =========================##
 function check_nginx() {
     cd ${src_dir}
-    if [[ ! -f nginx-${nginx_version}.tar.gz ]] ; then
-        wget ${nginx_dist_url} -Onginx-${nginx_version}.tar.gz
-    fi
+    wget -c ${nginx_dist_url} -Onginx-${nginx_version}.tar.gz
 }
 function ins_nginx() {
     cd $src_dir
@@ -50,9 +48,7 @@ function init_nginx() {
 function check_mysql() {
     cd ${src_dir}
     apt-get install libncurses5-dev cmake -y
-    if [[ ! -f mysql-${mysql_version}.tar.gz ]] ; then
-        wget ${mysql_dist_url} -Omysql-${mysql_version}.tar.gz
-    fi
+    wget -c ${mysql_dist_url} -Omysql-${mysql_version}.tar.gz
 }
 function ins_mysql() {
     cd $src_dir
@@ -95,9 +91,7 @@ function init_python() {
 function check_php() {
     cd ${src_dir}
     apt-get install libcurl4-openssl-dev libmcrypt-dev libpng++-dev libjpeg-dev libfreetype6-dev -y
-    if [[ ! -f php-${php_version}.tar.gz ]] ; then
-        wget ${php_dist_url} -Ophp-${php_version}.tar.gz
-    fi
+    wget -c ${php_dist_url} -Ophp-${php_version}.tar.gz
 }
 function ins_php() {
     cd ${src_dir}
