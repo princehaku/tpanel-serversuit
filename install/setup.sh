@@ -39,7 +39,7 @@ function ins_nginx() {
     make && make install
     if [[ -f ${base_dir}/server/nginx-${nginx_version}/sbin/nginx ]] ; then
         echo "Nginx Install Failed"
-        exit(0)
+        exit 0
     fi
 }
 
@@ -75,7 +75,7 @@ function ins_mysql() {
     
     if [[ -f ${base_dir}/server/mysql-${mysql_version}/bin/mysqld ]] ; then
         echo "Mysql Install Failed"
-        exit(0)
+        exit 0
     fi
 }
 function init_mysql() {
@@ -110,7 +110,7 @@ function ins_php() {
     
     if [[ -f ${base_dir}/server/php-${php_version}/bin/php ]] ; then
         echo "PHP Install Failed"
-        exit(0)
+        exit 0
     fi
 }
 
