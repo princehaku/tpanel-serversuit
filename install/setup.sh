@@ -24,6 +24,7 @@ shell_dir=$(pwd)
 function check_nginx() {
     cd ${src_dir}
     wget -c ${nginx_dist_url} -Onginx-${nginx_version}.tar.gz
+    apt-get install libpcre3-dev zlib-bin libssl-dev -y
 }
 function ins_nginx() {
     cd $src_dir
@@ -39,9 +40,8 @@ function ins_nginx() {
 }
 
 function init_nginx() {
-    rm ${base_dir}/server/nginx
     cp ${shell_dir}/nginx.conf.default ${base_dir}/server/nginx-${nginx_version}/conf/nginx.conf
-    ln -s ${base_dir}/server/nginx-${nginx_version} ${base_dir}/server/nginx
+    ln -f -s ${base_dir}/server/nginx-${nginx_version} ${base_dir}/server/nginx
     mkdir ${base_dir}/etc/nginx.d
 }
 ##========================= mysql =========================##
@@ -71,21 +71,6 @@ function ins_mysql() {
 }
 function init_mysql() {
     echo
-}
-##========================= python =========================##
-function check_python() {
-    echo
-}
-function ins_python() {
-    cd $src_dir
-    tar xvf Python-2.7.5.tgz
-    cd Python-2.7.5
-    ./configure --prefix=${base_dir}shared/python-2.7.5
-    make && make install
-}
-function init_python() {
-    #init pip
-    ${base_dir}/shared/python-2.7.5/bin/python ez_setup.py
 }
 ##========================= php =========================##
 function check_php() {
@@ -117,10 +102,9 @@ function ins_php() {
 
 function init_php() {
     cd ${shell_dir}
-    rm ${base_dir}/server/fpm-php
     cp ${shell_dir}/php-fpm.conf.default ${base_dir}/server/php-${php_version}/etc/php-fpm.conf
     cp ${shell_dir}/php.ini.default ${base_dir}/server/php-${php_version}/lib/php.ini
-    ln -s ${base_dir}/server/php-${php_version} ${base_dir}/server/fpm-php
+    ln -f -s ${base_dir}/server/php-${php_version} ${base_dir}/server/fpm-php
     mkdir ${base_dir}/etc/fpm.d
 }
 
