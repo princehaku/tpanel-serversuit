@@ -233,10 +233,6 @@ asp_tags = Off
 ; http://php.net/precision
 precision = 14
 
-; Enforce year 2000 compliance (will cause problems with non-compliant browsers)
-; http://php.net/y2k-compliance
-y2k_compliance = On
-
 ; Output buffering is a mechanism for controlling how much output data
 ; (excluding headers and cookies) PHP should keep internally before pushing that
 ; data to the client. If your application's output exceeds this setting, PHP
@@ -319,57 +315,7 @@ unserialize_callback_func =
 ; are decoded with unserialize, the data will remain the same.
 serialize_precision = 17
 
-; This directive allows you to enable and disable warnings which PHP will issue
-; if you pass a value by reference at function call time. Passing values by
-; reference at function call time is a deprecated feature which will be removed
-; from PHP at some point in the near future. The acceptable method for passing a
-; value by reference to a function is by declaring the reference in the functions
-; definition, not at call time. This directive does not disable this feature, it
-; only determines whether PHP will warn you about it or not. These warnings
-; should enabled in development environments only.
-; Default Value: On (Suppress warnings)
-; Development Value: Off (Issue warnings)
-; Production Value: Off (Issue warnings)
-; http://php.net/allow-call-time-pass-reference
-allow_call_time_pass_reference = Off
 
-; Safe Mode
-; http://php.net/safe-mode
-safe_mode = Off
-
-; By default, Safe Mode does a UID compare check when
-; opening files. If you want to relax this to a GID compare,
-; then turn on safe_mode_gid.
-; http://php.net/safe-mode-gid
-safe_mode_gid = Off
-
-; When safe_mode is on, UID/GID checks are bypassed when
-; including files from this directory and its subdirectories.
-; (directory must also be in include_path or full path must
-; be used when including)
-; http://php.net/safe-mode-include-dir
-safe_mode_include_dir =
-
-; When safe_mode is on, only executables located in the safe_mode_exec_dir
-; will be allowed to be executed via the exec family of functions.
-; http://php.net/safe-mode-exec-dir
-safe_mode_exec_dir =
-
-; Setting certain environment variables may be a potential security breach.
-; This directive contains a comma-delimited list of prefixes.  In Safe Mode,
-; the user may only alter environment variables whose names begin with the
-; prefixes supplied here.  By default, users will only be able to set
-; environment variables that begin with PHP_ (e.g. PHP_FOO=BAR).
-; Note:  If this directive is empty, PHP will let the user modify ANY
-;   environment variable!
-; http://php.net/safe-mode-allowed-env-vars
-safe_mode_allowed_env_vars = PHP_
-
-; This directive contains a comma-delimited list of environment variables that
-; the end user won't be able to change using putenv().  These variables will be
-; protected even if safe_mode_allowed_env_vars is set to allow to change them.
-; http://php.net/safe-mode-protected-env-vars
-safe_mode_protected_env_vars = LD_LIBRARY_PATH
 
 ; open_basedir, if set, limits all file operations to the defined directory
 ; and below.  This directive makes most sense if used in a per-directory
@@ -546,7 +492,7 @@ display_errors = On
 ; Development Value: On
 ; Production Value: Off
 ; http://php.net/display-startup-errors
-display_startup_errors = On
+display_startup_errors = Off
 
 ; Besides displaying errors, PHP can also log errors to locations such as a
 ; server-specific log, STDERR, or a location specified by the error_log
@@ -737,31 +683,7 @@ auto_globals_jit = On
 
 ; Maximum size of POST data that PHP will accept.
 ; http://php.net/post-max-size
-post_max_size = 8M
-
-; Magic quotes are a preprocessing feature of PHP where PHP will attempt to
-; escape any character sequences in GET, POST, COOKIE and ENV data which might
-; otherwise corrupt data being placed in resources such as databases before
-; making that data available to you. Because of character encoding issues and
-; non-standard SQL implementations across many databases, it's not currently
-; possible for this feature to be 100% accurate. PHP's default behavior is to
-; enable the feature. We strongly recommend you use the escaping mechanisms
-; designed specifically for the database your using instead of relying on this
-; feature. Also note, this feature has been deprecated as of PHP 5.3.0 and is
-; scheduled for removal in PHP 6.
-; Default Value: On
-; Development Value: Off
-; Production Value: Off
-; http://php.net/magic-quotes-gpc
-magic_quotes_gpc = Off
-
-; Magic quotes for runtime-generated data, e.g. data from SQL, from exec(), etc.
-; http://php.net/magic-quotes-runtime
-magic_quotes_runtime = Off
-
-; Use Sybase-style magic quotes (escape ' with '' instead of \').
-; http://php.net/magic-quotes-sybase
-magic_quotes_sybase = Off
+post_max_size = 16M
 
 ; Automatically add files before PHP document.
 ; http://php.net/auto-prepend-file
@@ -888,10 +810,10 @@ file_uploads = On
 
 ; Maximum allowed size for uploaded files.
 ; http://php.net/upload-max-filesize
-upload_max_filesize = 2M
+upload_max_filesize = 16M
 
 ; Maximum number of files that can be uploaded via a single request
-max_file_uploads = 20
+max_file_uploads = 15
 
 ;;;;;;;;;;;;;;;;;;
 ; Fopen wrappers ;
