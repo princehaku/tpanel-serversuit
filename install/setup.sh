@@ -90,7 +90,7 @@ function init_python() {
 ##========================= php =========================##
 function check_php() {
     cd ${src_dir}
-    apt-get install libxml2-dev libcurl4-openssl-dev libmcrypt-dev libpng++-dev libjpeg-dev libfreetype6-dev -y
+    apt-get install libxml2-dev libcurl4-openssl-dev libmcrypt-dev libpng-dev libjpeg-dev libfreetype6-dev -y
     wget -c ${php_dist_url} -Ophp-${php_version}.tar.gz
 }
 function ins_php() {
@@ -106,6 +106,9 @@ function ins_php() {
       --with-pdo-mysql \
       --with-curl \
       --with-gd \
+      --with-jpeg-dir=/usr/lib \
+      --with-png-dir=/usr/lib \
+      --with-freetype-dir=/usr/lib \
       --enable-fpm \
       --enable-mbstring
 
