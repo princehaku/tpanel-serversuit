@@ -90,7 +90,7 @@ function init_python() {
 ##========================= php =========================##
 function check_php() {
     cd ${src_dir}
-    apt-get install libcurl4-openssl-dev libmcrypt-dev libpng++-dev libjpeg-dev libfreetype6-dev -y
+    apt-get install libxml2-dev libcurl4-openssl-dev libmcrypt-dev libpng++-dev libjpeg-dev libfreetype6-dev -y
     wget -c ${php_dist_url} -Ophp-${php_version}.tar.gz
 }
 function ins_php() {
