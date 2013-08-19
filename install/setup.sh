@@ -79,7 +79,16 @@ function ins_mysql() {
     fi
 }
 function init_mysql() {
-    echo
+    ln -f -s ${base_dir}/server/mysql-${mysql_version} ${base_dir}/server/mysql
+    if [[ ! -f ${base_dir}etc/mysql/my.cnf ]] ; then
+	    cd ${base_dir}/server/mysql
+	    ./scripts/mysql_install_db
+	    mkdir -p ${base_dir}/etc/mysql/
+	    cp ./support-files/my-medium.cnf ${base_dir}/etc/mysql/my.cnf
+	    chown amm:amm ./data -R
+	    ./bin/mysqld --defaults-file="${base_dir}etc/mysql/my.cnf" --user=amm &
+	    ./bin/mysqladmin -u root password "hello_tpanel"
+    fi
 }
 ##========================= php =========================##
 function check_php() {

@@ -1,4 +1,5 @@
 #!/bin/bash 
+
 if [[ ! $(id -u) -eq 0 ]] ; then
 	echo "You Must Be Root"
 	exit 0
