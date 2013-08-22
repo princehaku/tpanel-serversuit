@@ -4,14 +4,11 @@
 
 		server_name  {{domain_name}} www.{{domain_name}};
 
-        root /home/{{user_name}}/{{domain_name}};
 		
 		access_log  /home/{{user_name}}/logs/{{domain_name}}.nginx_access.log  main;
 
-		location / {
-			root   html;
-			index  index.html index.htm index.php;
-		}
+       	root /home/{{user_name}}/{{domain_name}};
+		index  index.html index.htm index.php;
 
 		#error_page  404              /404.html;
 		
