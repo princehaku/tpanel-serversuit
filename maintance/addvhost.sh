@@ -21,8 +21,9 @@ fi
 echo "+--------------------------------------+"
 echo "+               adding user            +"
 echo "+--------------------------------------+"
-user_pwd=$(md5sum < /proc/uptime)
-useradd -m $user_name -p $user_pwd
+user_pwd=$(md5sum </proc/uptime | cut -d " " -f 1)
+user_pwd=${user_pwd:0:5}
+useradd -m $user_name -p $(mkpasswd $user_pwd)
 mkdir -p /home/$user_name/logs
 chown $user_name:$user_name /home/$user_name/ -R
 chmod 750 /home/$user_name -R
@@ -32,9 +33,12 @@ echo "+--------------------------------------+"
 echo "+              adding vhost            +"
 echo "+--------------------------------------+"
 mkdir -p /home/$user_name/$domain_name
-cat >> $etc_dirnginx.d/$domain_name.conf << EOF
+# init fpm poll
+
+# init nginx port
+cat >> ${etc_dir}nginx.d/$domain_name.conf << EOF
 EOF
-service httpd reload
+
 echo "+--------------------------------------+"
 echo "+              finish                  +"
 echo "+--------------------------------------+"
