@@ -233,6 +233,10 @@ asp_tags = Off
 ; http://php.net/precision
 precision = 14
 
+; Enforce year 2000 compliance (will cause problems with non-compliant browsers)
+; http://php.net/y2k-compliance
+y2k_compliance = On
+
 ; Output buffering is a mechanism for controlling how much output data
 ; (excluding headers and cookies) PHP should keep internally before pushing that
 ; data to the client. If your application's output exceeds this setting, PHP
@@ -378,7 +382,7 @@ zend.enable_gc = On
 ; threat in any way, but it makes it possible to determine whether you use PHP
 ; on your server or not.
 ; http://php.net/expose-php
-expose_php = On
+expose_php = Off
 
 ;;;;;;;;;;;;;;;;;;;
 ; Resource Limits ;
@@ -464,7 +468,7 @@ memory_limit = 128M
 ; Development Value: E_ALL | E_STRICT
 ; Production Value: E_ALL & ~E_DEPRECATED
 ; http://php.net/error-reporting
-error_reporting = E_ALL & ~E_DEPRECATED
+error_reporting = E_ALL & ~E_NOTICE
 
 ; This directive controls whether or not and where PHP will output errors,
 ; notices and warnings too. Error output is very useful during development, but
@@ -481,7 +485,7 @@ error_reporting = E_ALL & ~E_DEPRECATED
 ; Development Value: On
 ; Production Value: Off
 ; http://php.net/display-errors
-display_errors = On
+display_errors = Off
 
 ; The display of errors which occur during PHP's startup sequence are handled
 ; separately from display_errors. PHP's default behavior is to suppress those
@@ -586,7 +590,7 @@ html_errors = Off
 ; empty.
 ; http://php.net/error-log
 ; Example:
-error_log = /home/haku/logs/php_errors.log
+error_log = /opt/net.techest/tpanel/logs/php_errors.log
 ; Log errors to syslog (Event Log on NT, not valid in Windows 95).
 ;error_log = syslog
 
@@ -1415,7 +1419,7 @@ session.serialize_handler = php
 ; Development Value: 1
 ; Production Value: 1
 ; http://php.net/session.gc-probability
-session.gc_probability = 0
+session.gc_probability = 1
 
 ; Defines the probability that the 'garbage collection' process is started on every
 ; session initialization. The probability is calculated by using the following equation:
