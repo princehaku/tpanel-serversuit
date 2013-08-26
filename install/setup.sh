@@ -145,7 +145,7 @@ function init_dirs() {
     mkdir ${base_dir}/logs
     mkdir ${base_dir}/server
     mkdir -p ${src_dir}
-    cd shell_dir/../
+    cd ${shell_dir}/../
     cp maintance ${base_dir} -R
 }
 
