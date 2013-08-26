@@ -1,7 +1,7 @@
 #!/bin/bash
 if [[ $(id -u) -ne 0 ]]; then
    echo "You Must Be Root"
-   #exit 0
+   exit 0
 fi
 
 base_dir="/opt/net.techest/tpanel/"

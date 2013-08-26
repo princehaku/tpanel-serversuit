@@ -157,7 +157,7 @@ function install() {
     init_dirs
     touch .env_ready
 
-    # 鏍规嵁鎸囦护瀹夎
+    # 根据指令安装
 
     if [[ -z $1 ]] ; then
         check_nginx

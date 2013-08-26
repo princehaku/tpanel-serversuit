@@ -15,7 +15,6 @@ function re_nginx() {
 	echo "Done"
 }
 
-
 function re_fpm() {
 	echo "Restaring FPM"
 	"${server_dir}fpm-php/bin/php" -v
@@ -26,7 +25,9 @@ function re_fpm() {
 
 function re_mysql() {
 	echo "Restaring Mysql"
-
+	pkill mysqld
+	cd ${server_dir}mysql
+	./bin/mysqld --defaults-file="${base_dir}etc/mysql/my.cnf" --user=amm &
 }
 
 if [[ -z $1 ]] ; then
