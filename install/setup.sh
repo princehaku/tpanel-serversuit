@@ -108,6 +108,7 @@ function ins_php() {
     ./configure --prefix=${base_dir}/server/php-${php_version} \
       --with-mysql \
       --with-pdo-mysql \
+      --with-mcrypt \
       --with-curl \
       --with-gd \
       --with-jpeg-dir=/usr/lib \
