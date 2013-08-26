@@ -44,7 +44,8 @@ function ins_nginx() {
 }
 
 function init_nginx() {
-    cp ${shell_dir}/nginx.conf.default ${base_dir}/server/nginx-${nginx_version}/conf/nginx.conf
+    cp ${shell_dir}/configs/nginx.conf.default ${base_dir}/server/nginx-${nginx_version}/conf/nginx.conf
+    cp ${shell_dir}/configs/fastcgi_params ${base_dir}/server/nginx-${nginx_version}/conf/fastcgi_params
     ln -f -s ${base_dir}/server/nginx-${nginx_version} ${base_dir}/server/nginx
     mkdir ${base_dir}/etc/nginx.d
 }
@@ -125,8 +126,8 @@ function ins_php() {
 
 function init_php() {
     cd ${shell_dir}
-    cp ${shell_dir}/php-fpm.conf.default ${base_dir}/server/php-${php_version}/etc/php-fpm.conf
-    cp ${shell_dir}/php.ini.default ${base_dir}/server/php-${php_version}/lib/php.ini
+    cp ${shell_dir}/configs/php-fpm.conf.default ${base_dir}/server/php-${php_version}/etc/php-fpm.conf
+    cp ${shell_dir}/configs/php.ini.default ${base_dir}/server/php-${php_version}/lib/php.ini
     ln -f -s ${base_dir}/server/php-${php_version} ${base_dir}/server/fpm-php
     mkdir ${base_dir}/etc/fpm.d
 }
@@ -144,6 +145,8 @@ function init_dirs() {
     mkdir ${base_dir}/logs
     mkdir ${base_dir}/server
     mkdir -p ${src_dir}
+    cd shell_dir/../
+    cp maintance ${base_dir} -R
 }
 
 function install() {

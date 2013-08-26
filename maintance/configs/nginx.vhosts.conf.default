@@ -28,23 +28,13 @@
 		# pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
 		#
 		# deny access to .htaccess files, if Apache's document root
-		location ~* ^(.+\.php)(.*)$ {
-			fastcgi_pass        unix:/home/{{user_name}}/tmp/fpm-php.sock;
-			fastcgi_index       index.php;
-			fastcgi_hide_header X-Powered-By;
-			fastcgi_intercept_errors on;
-			fastcgi_buffers     16 32k;
-			fastcgi_buffer_size 32k;
-			fastcgi_busy_buffers_size 32k;
-			fastcgi_param       SCRIPT_FILENAME    $document_root$fastcgi_script_name;
-			fastcgi_param       SCRIPT_NAME        $fastcgi_script_name;
-			fastcgi_param       PATH_INFO   $2;
-			include             fastcgi_params;
-			fastcgi_param       SCRIPT_URI http://$server_name$uri;
-			fastcgi_param       HTTP_REFERER $http_referer;
-			fastcgi_param       HTTP_HOST $http_host;
-			fastcgi_param       HTTP_ACCEPT $http_accept;
-		}
+		location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+				fastcgi_pass        unix:/home/{{user_name}}/tmp/fpm-php.sock;
+				fastcgi_index       index.php;
+				include             fastcgi_params;
+    }   
 		# concurs with nginx's one
 		#
 		location ~ /\.ht {
