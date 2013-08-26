@@ -39,7 +39,7 @@ http {
 
 		location / {
 			root   html;
-			index  index.html index.htm;
+			index  index.php index.html index.htm;
 		}
 
     #error_page  404              /404.html;
@@ -62,15 +62,16 @@ http {
     # deny access to .htaccess files, if Apache's document root
 		location ~* ^(.+\.php)(.*)$ {
 			fastcgi_pass        127.0.0.1:9090;
+			include             fastcgi_params;
 			fastcgi_index       index.php;
 			fastcgi_hide_header X-Powered-By;
 			fastcgi_intercept_errors on;
 			fastcgi_buffers     16 32k;
 			fastcgi_buffer_size 32k;
 			fastcgi_busy_buffers_size 32k;
-			fastcgi_param       SCRIPT_FILENAME $document_root$1;
+			fastcgi_param        SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+			fastcgi_param       SCRIPT_NAME        $fastcgi_script_name;
 			fastcgi_param       PATH_INFO   $2;
-			include             fastcgi_params;
 			fastcgi_param       SCRIPT_URI http://$server_name$uri;
 			fastcgi_param       HTTP_REFERER $http_referer;
 			fastcgi_param       HTTP_HOST $http_host;
