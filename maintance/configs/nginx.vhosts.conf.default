@@ -31,7 +31,7 @@
 		location ~ \.php$ {
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
         # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
-				fastcgi_pass        unix:/home/{{user_name}}/tmp/fpm-php.sock;
+				fastcgi_pass        unix:/home/{{user_name}}/tmp/fpm-php-{{domain_name}}.sock;
 				fastcgi_index       index.php;
 				include             fastcgi_params;
     }   
