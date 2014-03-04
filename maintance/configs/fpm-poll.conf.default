@@ -39,7 +39,7 @@ group = {{user_name}}
 ;                            specific port;
 ;   '/path/to/unix/socket' - to listen on a unix socket.
 ; Note: This value is mandatory.
-listen = /home/{{user_name}}/tmp/fpm-php-$pool.sock
+listen = /home/{{user_name}}/tmp/fpm-php-{{domain_name}}.sock
 
 ; Set listen(2) backlog. A value of '-1' means unlimited.
 ; Default Value: 128 (-1 on FreeBSD and OpenBSD)
