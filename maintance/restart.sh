@@ -18,14 +18,14 @@ function re_nginx() {
 function re_fpm() {
 	echo "Restaring FPM"
 	"${server_dir}fpm-php/bin/php" -v
-	pkill php
+	pkill php$
 	"${server_dir}fpm-php/sbin/php-fpm"
 	echo "Done"
 }
 
 function re_mysql() {
 	echo "Restaring Mysql"
-	pkill mysqld
+	pkill mysqld$
 	cd ${server_dir}mysql
 	./bin/mysqld --defaults-file="${base_dir}etc/mysql/my.cnf" --user=amm &
 }
@@ -33,7 +33,7 @@ function re_mysql() {
 if [[ -z $1 ]] ; then
 	re_nginx
 	re_fpm
-	re_mysql
+#	re_mysql
 else
 	re_$1
 fi

@@ -9,7 +9,7 @@ if [[ -z $1 ]] ; then
 fi
 
 nginx_version=1.4.2
-php_version=5.4.16
+php_version=5.4.23
 mysql_version=5.5.33
 
 nginx_dist_url=http://nginx.org/download/nginx-${nginx_version}.tar.gz
@@ -24,7 +24,7 @@ shell_dir=$(pwd)
 function check_nginx() {
     cd ${src_dir}
     wget -c ${nginx_dist_url} -Onginx-${nginx_version}.tar.gz
-    apt-get install libpcre3-dev zlib-bin libssl-dev -y
+#    apt-get install libpcre3-dev zlib-bin libssl-dev -y
 }
 function ins_nginx() {
     cd $src_dir
@@ -52,7 +52,7 @@ function init_nginx() {
 ##========================= mysql =========================##
 function check_mysql() {
     cd ${src_dir}
-    apt-get install libncurses5-dev cmake -y
+ #   apt-get install libncurses5-dev cmake -y
     wget -c ${mysql_dist_url} -Omysql-${mysql_version}.tar.gz
 }
 function ins_mysql() {
@@ -95,7 +95,7 @@ function init_mysql() {
 ##========================= php =========================##
 function check_php() {
     cd ${src_dir}
-    apt-get install libxml2-dev libcurl4-openssl-dev libmcrypt-dev libpng-dev libjpeg-dev libfreetype6-dev -y
+#    apt-get install libxml2-dev libcurl4-openssl-dev libmcrypt-dev libpng-dev libjpeg-dev libfreetype6-dev -y
     wget -c ${php_dist_url} -Ophp-${php_version}.tar.gz
 }
 function ins_php() {

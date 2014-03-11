@@ -5,9 +5,9 @@
 		server_name  {{domain_name}} www.{{domain_name}};
 
 		
-		access_log  /home/{{user_name}}/logs/{{domain_name}}.nginx_access.log  main;
+		access_log  /Users/{{user_name}}/htdocs/logs/{{domain_name}}.nginx_access.log  main;
 
-       	root /home/{{user_name}}/{{domain_name}};
+       	root /Users/{{user_name}}/htdocs/{{domain_name}};
 		index  index.html index.htm index.php;
 
 		#error_page  404              /404.html;
@@ -17,6 +17,26 @@
 		error_page   500 502 503 504  /50x.html;
 		location = /50x.html {
 			root   html;
+		}
+		
+		set $php 1;
+		
+		set $flag 0;
+	    
+	    if (!-f $request_filename) {
+		   	set $flag "1";
+		}
+	    
+	    if (-f index-test.php) {
+			set $flag "2";
+		}
+						
+		if ($flag = "2") {
+		    rewrite ^/(.*)$ /index-test.php?$1;
+		}
+		
+		if ($flag = "1") {
+		    rewrite ^/(.*)$ /index.php?$1;
 		}
 
 		# proxy the PHP scripts to Apache listening on 127.0.0.1:80
@@ -31,7 +51,7 @@
 		location ~ \.php$ {
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
         # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
-				fastcgi_pass        unix:/home/{{user_name}}/tmp/fpm-php-{{domain_name}}.sock;
+				fastcgi_pass        unix:/Users/{{user_name}}/htdocs/tmp/fpm-php-{{domain_name}}.sock;
 				fastcgi_index       index.php;
 				include             fastcgi_params;
     }   
