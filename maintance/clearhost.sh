@@ -13,6 +13,7 @@ read -p "domain:" temp
 if [[ "$temp" != "" ]]; then
    domain_name=$temp
 fi
+user_name=$(who am i | cut -d " " -f 1)
 echo "+--------------------------------------+"
 echo "+              clear vhost             +"
 echo "+--------------------------------------+"

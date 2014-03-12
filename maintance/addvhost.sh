@@ -13,14 +13,12 @@ read -p "domain:" temp
 if [[ "$temp" != "" ]]; then
    domain_name=$temp
 fi
-echo "please input user login name"
-user_name="haku-mac"
+user_name=$(who am i | cut -d " " -f 1)
 echo "+--------------------------------------+"
-echo "+               adding user            +"
+echo "+              checking user           +"
 echo "+--------------------------------------+"
 user_pwd=$(echo "123" | cut -d " " -f 1)
 user_pwd=${user_pwd:0:5}
-#echo "your password is $user_pwd"
 
 echo "+--------------------------------------+"
 echo "+              adding vhost            +"
