@@ -35,7 +35,7 @@ function ins_nginx() {
     rm nginx-${nginx_version} -rf
     tar xvf nginx-${nginx_version}.tar.gz
     cd nginx-${nginx_version}
-    ./configure --prefix=${base_dir}/server/nginx-${nginx_version}
+    ./configure --prefix=${base_dir}/server/nginx-${nginx_version} --with-pcre --with-http_sub_module --with-http_ssl_module --with-http_gzip_static_module
     make && make install
     if [[ ! -f ${base_dir}/server/nginx-${nginx_version}/sbin/nginx ]] ; then
         echo "Nginx Install Failed"
