@@ -9,12 +9,12 @@ if [[ -z $1 ]] ; then
 fi
 
 nginx_version=1.4.2
-php_version=5.4.16
-mysql_version=5.5.33
+php_version=7.0.11
+mysql_version=5.7.15
 
 nginx_dist_url=http://nginx.org/download/nginx-${nginx_version}.tar.gz
-php_dist_url=http://www.php.net/distributions/php-${php_version}.tar.gz
-mysql_dist_url=http://cdn.mysql.com/Downloads/MySQL-5.5/mysql-${mysql_version}.tar.gz
+php_dist_url=http://php.net/get/php-${php_version}.tar.gz/from/a/mirror
+mysql_dist_url=http://cdn.mysql.com/Downloads/MySQL-5.7/mysql-${mysql_version}.tar.gz
 
 base_dir="/opt/net.techest/tpanel/"
 src_dir=${base_dir}"src/"
@@ -70,7 +70,9 @@ function ins_mysql() {
       -DDEFAULT_COLLATION=utf8_unicode_ci \
       -DWITH_EXTRA_CHARSETS=all \
       -DWITH_DEBUG=0 \
-      -DWITH_UNIT_TESTS=0
+      -DWITH_UNIT_TESTS=0 \
+	  -DDOWNLOAD_BOOST=1 \
+	  -DWITH_BOOST=./
 
     make && make install
     
@@ -85,9 +87,9 @@ function init_mysql() {
 	    cd ${base_dir}/server/mysql
 	    chown amm:amm ${base_dir}/server/mysql -R
 	    mkdir -p ${base_dir}/etc/mysql/
-	    cp ./support-files/my-medium.cnf ${base_dir}/etc/mysql/my.cnf
+	    cp ./support-files/my-default.cnf ${base_dir}/etc/mysql/my.cnf
 	    chown amm:amm ${base_dir}/etc/mysql/my.cnf
-	    ./scripts/mysql_install_db --basedir=${base_dir}/server/mysql --datadir=${base_dir}/server/mysql/data --user=amm
+		./bin/mysqld --initialize --basedir=${base_dir}/server/mysql --datadir=${base_dir}/server/mysql/data --user=amm --explicit_defaults_for_timestamp
 	    ./bin/mysqld --defaults-file="${base_dir}etc/mysql/my.cnf" --user=amm &
 	    ./bin/mysqladmin -u root password "hello_tpanel"
     fi
@@ -108,9 +110,11 @@ function ins_php() {
     cd php-${php_version}
     ./configure --prefix=${base_dir}/server/php-${php_version} \
       --with-mysql \
+      --with-mysqli \
       --with-pdo-mysql \
       --with-mcrypt \
       --with-curl \
+      --with-openssl \
       --with-gd \
       --with-jpeg-dir=/usr/lib \
       --with-png-dir=/usr/lib \
