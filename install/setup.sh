@@ -10,11 +10,11 @@ fi
 
 nginx_version=1.4.2
 php_version=7.0.11
-mysql_version=5.7.15
+mysql_version=5.7.19
 
 nginx_dist_url=http://nginx.org/download/nginx-${nginx_version}.tar.gz
-php_dist_url=http://php.net/get/php-${php_version}.tar.gz/from/a/mirror
-mysql_dist_url=http://cdn.mysql.com/Downloads/MySQL-5.7/mysql-${mysql_version}.tar.gz
+php_dist_url=http://hk1.php.net/get/php-${php_version}.tar.gz/from/this/mirror
+mysql_dist_url=http://ftp.ntu.edu.tw/MySQL/Downloads/MySQL-5.7/mysql-${mysql_version}.tar.gz
 
 base_dir="/opt/net.techest/tpanel/"
 src_dir=${base_dir}"src/"
@@ -24,7 +24,7 @@ shell_dir=$(pwd)
 function check_nginx() {
     cd ${src_dir}
     wget -c ${nginx_dist_url} -Onginx-${nginx_version}.tar.gz
-    apt-get install libpcre3-dev zlib-bin libssl-dev -y
+	apt-get install libpcre3-dev minizip libssl-dev -y
 }
 function ins_nginx() {
     cd $src_dir
